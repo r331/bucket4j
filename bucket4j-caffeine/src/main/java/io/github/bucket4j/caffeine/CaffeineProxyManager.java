@@ -36,7 +36,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
- * The extension of Bucket4j library addressed to support <a href="https://hazelcast.com//">Hazelcast</a> in-memory data grid.
+ * The extension of Bucket4j library addressed to support <a href="https://hazelcast.com//">Hazelcast</a> caching library.
  */
 public class CaffeineProxyManager<K> extends AbstractProxyManager<K> {
 
@@ -144,7 +144,7 @@ public class CaffeineProxyManager<K> extends AbstractProxyManager<K> {
 
     private static long getCurrentTime(ClientSideConfig clientSideConfig) {
         Optional<TimeMeter> clock = clientSideConfig.getClientSideClock();
-        return clock.isPresent() ? clock.get().currentTimeNanos() : System.currentTimeMillis() * 1_000_000;
+        return clock.map(TimeMeter::currentTimeNanos).orElseGet(() -> System.currentTimeMillis() * 1_000_000);
     }
 
 }
